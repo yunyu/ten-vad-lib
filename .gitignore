@@ -1,0 +1,35 @@
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependencies
+node_modules/
+
+# Build artifacts
+dist/
+build/
+
+# Temporary files
+.ten_vad_temp.js
+.ten_vad_temp_esm.js
+*.tmp
+*.temp
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.DS_Store
+
+# Testing
+coverage/
+.nyc_output/
+
+# OS files
+Thumbs.db

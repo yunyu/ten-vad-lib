@@ -1,0 +1,32 @@
+# Development files
+test.js
+example-hono.js
+*.test.js
+*.spec.js
+
+# Source control
+.git
+.gitignore
+
+# Editor directories and files
+.idea
+.vscode
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Dependencies
+node_modules
+
+# Build tools config
+.eslintrc*
+.prettierrc*
+tsconfig.json

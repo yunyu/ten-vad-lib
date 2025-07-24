@@ -1,0 +1,45 @@
+{
+  "name": "@gooney-001/ten-vad-lib",
+  "version": "1.0.2",
+  "description": "TEN-VAD WebAssembly module for Voice Activity Detection",
+  "main": "index.js",
+  "module": "index.mjs",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./index.mjs",
+      "require": "./index.js",
+      "types": "./index.d.ts"
+    }
+  },
+  "files": [
+    "index.js",
+    "index.mjs",
+    "index.d.ts",
+    "ten_vad.js",
+    "ten_vad.wasm",
+    "ten_vad.d.ts",
+    "README.md"
+  ],
+  "keywords": [
+    "vad",
+    "voice-activity-detection",
+    "webassembly",
+    "wasm",
+    "audio-processing",
+    "speech-detection",
+    "ten-vad"
+  ],
+  "author": "gooney gooney.me@gmail.com",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gooooooooney/ten-vad-lib.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gooooooooney/ten-vad-lib/issues"
+  }
+}
