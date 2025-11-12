@@ -1,5 +1,5 @@
 {
-  "name": "@gooney-001/ten-vad-lib",
+  "name": "@gooney-001/ten-vad-lib-cf",
   "version": "1.0.2",
   "description": "TEN-VAD WebAssembly module for Voice Activity Detection",
   "main": "index.js",
