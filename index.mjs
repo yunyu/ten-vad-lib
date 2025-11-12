@@ -192,14 +192,14 @@ export async function loadTENVAD(options = {}) {
         // For Cloudflare Workers, wasmModule is a precompiled WebAssembly.Module
         // Use instantiateWasm to handle it properly
         const moduleOptions = {
-            instantiateWasm: async (info, receiveInstance) => {
-                try {
-                    const instance = await WebAssembly.instantiate(wasmModule, info);
+            instantiateWasm: (info, receiveInstance) => {
+                // Instantiate async but return empty object to signal we're handling it
+                WebAssembly.instantiate(wasmModule, info).then(instance => {
                     receiveInstance(instance, wasmModule);
-                    return instance.exports;
-                } catch (err) {
-                    throw new Error(`Failed to instantiate WASM: ${err.message}`);
-                }
+                }).catch(err => {
+                    console.error('Failed to instantiate WASM:', err);
+                });
+                return {};
             },
             noInitialRun: false,
             noExitRuntime: true,
