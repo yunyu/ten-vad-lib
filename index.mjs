@@ -201,7 +201,7 @@ export async function loadTENVAD(options = {}) {
                 });
                 return {};
             },
-            noInitialRun: false,
+            noInitialRun: true,  // Don't run until WASM is ready
             noExitRuntime: true,
             ...options
         };
@@ -210,6 +210,11 @@ export async function loadTENVAD(options = {}) {
         
         // Add helper functions
         addHelperFunctions(vadModule);
+        
+        // Now manually run initialization since we set noInitialRun: true
+        if (vadModule.calledRun !== true && typeof vadModule._main === 'function') {
+            vadModule._main();
+        }
         
         return vadModule;
     } catch (error) {
