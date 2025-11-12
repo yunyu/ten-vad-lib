@@ -20,6 +20,9 @@ const require = createRequire(import.meta.url);
 import wasmModule from './ten_vad.wasm';
 import createVADModuleFactory from './ten_vad.js';
 
+console.log('[TEN-VAD-INIT] Module loaded');
+console.log('[TEN-VAD-INIT] wasmModule:', typeof wasmModule, wasmModule);
+
 // Helper functions to add to the module
 function addHelperFunctions(module) {
     // The module already has HEAP arrays from Emscripten, but we need to ensure they're all available
