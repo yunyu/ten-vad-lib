@@ -197,13 +197,14 @@ export async function loadTENVAD(options = {}) {
         if (wasmInput instanceof WebAssembly.Module) {
             // Use instantiateWasm for pre-compiled modules
             moduleOptions = {
-                instantiateWasm: (info, receiveInstance) => {
-                    WebAssembly.instantiate(wasmInput, info)
-                        .then((instance) => receiveInstance(instance, wasmInput))
-                        .catch((err) => {
-                            throw new Error(`Failed to instantiate WASM: ${err.message}`);
-                        });
-                    return {};
+                instantiateWasm: async (info, receiveInstance) => {
+                    try {
+                        const instance = await WebAssembly.instantiate(wasmInput, info);
+                        receiveInstance(instance, wasmInput);
+                        return instance.exports;
+                    } catch (err) {
+                        throw new Error(`Failed to instantiate WASM: ${err.message}`);
+                    }
                 },
                 noInitialRun: false,
                 noExitRuntime: true,
