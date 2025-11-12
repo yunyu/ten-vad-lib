@@ -20,9 +20,6 @@ const require = createRequire(import.meta.url);
 import wasmModule from './ten_vad.wasm';
 import createVADModuleFactory from './ten_vad.js';
 
-console.log('[TEN-VAD-INIT] Module loaded');
-console.log('[TEN-VAD-INIT] wasmModule:', typeof wasmModule, wasmModule);
-
 // Helper functions to add to the module
 function addHelperFunctions(module) {
     // The module already has HEAP arrays from Emscripten, but we need to ensure they're all available
@@ -194,11 +191,13 @@ export async function loadTENVAD(options = {}) {
         const moduleOptions = {
             instantiateWasm: (info, receiveInstance) => {
                 // Instantiate async but return empty object to signal we're handling it
-                WebAssembly.instantiate(wasmModule, info).then(instance => {
-                    receiveInstance(instance, wasmModule);
-                }).catch(err => {
-                    console.error('Failed to instantiate WASM:', err);
-                });
+                WebAssembly.instantiate(wasmModule, info)
+                    .then(instance => {
+                        receiveInstance(instance, wasmModule);
+                    })
+                    .catch(err => {
+                        console.error('Failed to instantiate WASM:', err);
+                    });
                 return {};
             },
             noInitialRun: true,  // Don't run until WASM is ready
@@ -210,11 +209,6 @@ export async function loadTENVAD(options = {}) {
         
         // Add helper functions
         addHelperFunctions(vadModule);
-        
-        // Now manually run initialization since we set noInitialRun: true
-        if (vadModule.calledRun !== true && typeof vadModule._main === 'function') {
-            vadModule._main();
-        }
         
         return vadModule;
     } catch (error) {
