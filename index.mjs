@@ -189,45 +189,22 @@ export async function loadTENVAD(options = {}) {
     
     // PATCHED FOR CLOUDFLARE WORKERS: New implementation below
     try {
-        // Get WASM binary or module from options or import
-        const wasmInput = options.wasmBinary || wasmModule;
-        
-        console.log('[TEN-VAD] wasmInput type:', typeof wasmInput);
-        console.log('[TEN-VAD] wasmInput instanceof WebAssembly.Module:', wasmInput instanceof WebAssembly.Module);
-        console.log('[TEN-VAD] wasmInput instanceof ArrayBuffer:', wasmInput instanceof ArrayBuffer);
-        console.log('[TEN-VAD] wasmInput instanceof Uint8Array:', wasmInput instanceof Uint8Array);
-        console.log('[TEN-VAD] wasmInput:', wasmInput);
-        
-        // Create the module instance
-        // If wasmInput is already a WebAssembly.Module, use instantiateWasm
-        // Otherwise pass as wasmBinary
-        let moduleOptions;
-        
-        if (wasmInput instanceof WebAssembly.Module) {
-            // Use instantiateWasm for pre-compiled modules
-            moduleOptions = {
-                instantiateWasm: async (info, receiveInstance) => {
-                    try {
-                        const instance = await WebAssembly.instantiate(wasmInput, info);
-                        receiveInstance(instance, wasmInput);
-                        return instance.exports;
-                    } catch (err) {
-                        throw new Error(`Failed to instantiate WASM: ${err.message}`);
-                    }
-                },
-                noInitialRun: false,
-                noExitRuntime: true,
-                ...options
-            };
-        } else {
-            // Use wasmBinary for raw bytes
-            moduleOptions = {
-                wasmBinary: wasmInput,
-                noInitialRun: false,
-                noExitRuntime: true,
-                ...options
-            };
-        }
+        // For Cloudflare Workers, wasmModule is a precompiled WebAssembly.Module
+        // Use instantiateWasm to handle it properly
+        const moduleOptions = {
+            instantiateWasm: async (info, receiveInstance) => {
+                try {
+                    const instance = await WebAssembly.instantiate(wasmModule, info);
+                    receiveInstance(instance, wasmModule);
+                    return instance.exports;
+                } catch (err) {
+                    throw new Error(`Failed to instantiate WASM: ${err.message}`);
+                }
+            },
+            noInitialRun: false,
+            noExitRuntime: true,
+            ...options
+        };
         
         const vadModule = await createVADModuleFactory(moduleOptions);
         
