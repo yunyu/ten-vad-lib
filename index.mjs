@@ -189,6 +189,12 @@ export async function loadTENVAD(options = {}) {
         // Get WASM binary or module from options or import
         const wasmInput = options.wasmBinary || wasmModule;
         
+        console.log('[TEN-VAD] wasmInput type:', typeof wasmInput);
+        console.log('[TEN-VAD] wasmInput instanceof WebAssembly.Module:', wasmInput instanceof WebAssembly.Module);
+        console.log('[TEN-VAD] wasmInput instanceof ArrayBuffer:', wasmInput instanceof ArrayBuffer);
+        console.log('[TEN-VAD] wasmInput instanceof Uint8Array:', wasmInput instanceof Uint8Array);
+        console.log('[TEN-VAD] wasmInput:', wasmInput);
+        
         // Create the module instance
         // If wasmInput is already a WebAssembly.Module, use instantiateWasm
         // Otherwise pass as wasmBinary
