@@ -5,6 +5,7 @@
  * WebAssembly module in ES Module environments.
  */
 
+/* PATCHED FOR CLOUDFLARE WORKERS: Original Node.js implementation commented out
 import { readFileSync, existsSync, writeFileSync, unlinkSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -14,6 +15,9 @@ import { createRequire } from 'module';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const require = createRequire(import.meta.url);
+*/
+
+import wasmModule from './ten_vad.wasm';
 
 // Helper functions to add to the module
 function addHelperFunctions(module) {
@@ -77,6 +81,8 @@ function addHelperFunctions(module) {
  * @returns {Promise} Promise that resolves to the loaded module
  */
 export async function loadTENVAD(options = {}) {
+    // PATCHED FOR CLOUDFLARE WORKERS: Original Node.js implementation commented out
+    /*
     try {
         // Get the directory where this package is installed
         const packageDir = __dirname;
@@ -172,6 +178,33 @@ export async function loadTENVAD(options = {}) {
             return vadModule;
         }
         
+    } catch (error) {
+        throw new Error(`Failed to load TEN-VAD module: ${error.message}`);
+    }
+    */
+    
+    // PATCHED FOR CLOUDFLARE WORKERS: New implementation below
+    try {
+        // Import the WASM module factory
+        const { default: createVADModule } = await import('./ten_vad.js');
+        
+        // Get WASM binary from direct import or options
+        const wasmBinary = options.wasmBinary || wasmModule;
+        
+        // Create the module instance with WASM binary
+        const moduleOptions = {
+            wasmBinary: wasmBinary,
+            noInitialRun: false,
+            noExitRuntime: true,
+            ...options
+        };
+        
+        const vadModule = await createVADModule(moduleOptions);
+        
+        // Add helper functions
+        addHelperFunctions(vadModule);
+        
+        return vadModule;
     } catch (error) {
         throw new Error(`Failed to load TEN-VAD module: ${error.message}`);
     }
