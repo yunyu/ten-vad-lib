@@ -10,7 +10,9 @@
       "import": "./index.mjs",
       "require": "./index.js",
       "types": "./index.d.ts"
-    }
+    },
+    "./ten_vad.wasm": "./ten_vad.wasm",
+    "./ten_vad.js": "./ten_vad.js"
   },
   "files": [
     "index.js",

@@ -18,6 +18,7 @@ const require = createRequire(import.meta.url);
 */
 
 import wasmModule from './ten_vad.wasm';
+import createVADModuleFactory from './ten_vad.js';
 
 // Helper functions to add to the module
 function addHelperFunctions(module) {
@@ -185,9 +186,6 @@ export async function loadTENVAD(options = {}) {
     
     // PATCHED FOR CLOUDFLARE WORKERS: New implementation below
     try {
-        // Import the WASM module factory
-        const { default: createVADModule } = await import('./ten_vad.js');
-        
         // Get WASM binary from direct import or options
         const wasmBinary = options.wasmBinary || wasmModule;
         
@@ -199,7 +197,7 @@ export async function loadTENVAD(options = {}) {
             ...options
         };
         
-        const vadModule = await createVADModule(moduleOptions);
+        const vadModule = await createVADModuleFactory(moduleOptions);
         
         // Add helper functions
         addHelperFunctions(vadModule);
